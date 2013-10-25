@@ -6,6 +6,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<build>
+		<resources>
+			<resource>
+<!-- 				<targetPath>.</targetPath> -->
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.xtend</groupId>
