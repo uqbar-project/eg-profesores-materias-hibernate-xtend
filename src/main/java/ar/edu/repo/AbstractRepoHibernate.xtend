@@ -2,7 +2,6 @@ package ar.edu.repo
 
 import ar.edu.domain.Materia
 import ar.edu.domain.Profesor
-import org.apache.commons.collections.Closure
 import org.hibernate.HibernateException
 import org.hibernate.Session
 import org.hibernate.SessionFactory
@@ -46,11 +45,16 @@ abstract class AbstractRepoHibernate<T> {
 		this.executeBatch([ session| (session as Session).delete(object)])
 	}
 	
-	def void executeBatch(Closure closure) {
+	/**
+	 * executeBatch recibe como parametro un closure o expresion lambda:
+	 * esa expresion recibe como unico parametro un session y lo aplica a un
+	 * bloque que no devuelve nada (void)
+	 */
+	def void executeBatch((Session)=>void closure) {
 		val session = sessionFactory.openSession
 		try {
 			session.beginTransaction
-			closure.execute(session)
+			closure.apply(session)
 			session.transaction.commit
 		} catch (HibernateException e) {
 			session.transaction.rollback

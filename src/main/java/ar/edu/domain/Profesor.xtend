@@ -9,19 +9,21 @@ import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.ManyToMany
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Entity
+@Accessors
 class Profesor implements Serializable {
 	
 	@Id
 	@GeneratedValue
-	@Property private Long id
+	private Long id
 
 	@Column
-	@Property private String nombreCompleto
+	private String nombreCompleto
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	@Property private Set<Materia> materias
+	private Set<Materia> materias
 
 	// Lo necesita Hibernate
 	new() {

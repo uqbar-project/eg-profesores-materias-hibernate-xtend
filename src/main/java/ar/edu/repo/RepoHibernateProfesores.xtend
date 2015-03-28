@@ -17,7 +17,7 @@ class RepoHibernateProfesores extends AbstractRepoHibernate<Profesor> {
 		try {
 			result = session
 				.createCriteria(typeof(Profesor))
-				.createAlias("_materias", "materias")
+				.createAlias("materias", "materias")
 				.add(Restrictions.eq("materias.id", materia.id))
 				.list
 		} catch (HibernateException e) {

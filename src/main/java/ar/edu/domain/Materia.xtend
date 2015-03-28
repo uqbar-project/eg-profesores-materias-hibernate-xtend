@@ -4,19 +4,21 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import org.eclipse.xtend.lib.annotations.Accessors
 
 @Entity
+@Accessors
 class Materia {
 
 	@Id
 	@GeneratedValue
-	@Property private Long id
+	private Long id
 
 	@Column
-	@Property private String nombre
+	private String nombre
 
 	@Column
-	@Property private int anio
+	private int anio
 	
 	// Lo necesita Hibernate
 	new() {
