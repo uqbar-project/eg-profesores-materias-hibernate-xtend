@@ -5,12 +5,12 @@ import ar.edu.domain.Profesor
 import org.hibernate.HibernateException
 import org.hibernate.Session
 import org.hibernate.SessionFactory
-import org.hibernate.cfg.AnnotationConfiguration
+import org.hibernate.cfg.Configuration
 
 abstract class AbstractRepoHibernate<T> {
 	
 	private static final SessionFactory sessionFactory = 
-		new AnnotationConfiguration()
+		new Configuration()
 			.configure()
 			.addAnnotatedClass(Materia)
 			.addAnnotatedClass(Profesor)
