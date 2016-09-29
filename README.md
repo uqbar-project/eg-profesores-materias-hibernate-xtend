@@ -9,7 +9,12 @@ Necesitás instalar un motor de base de datos relacional (te recomendamos [MySQL
 Testea el mapeo objetos-relacional con Hibernate. El ejemplo muestra cómo modelar la relación muchos a muchos entre profesores y materias.
 
 * En MySQL: hay que crear una base de datos facultad. No hay que correr los scripts, las tablas se recrean cada vez que se corran los tests en xtend.
-* e importar el proyecto en Xtend
+
+``` sql
+CREATE SCHEMA facultad;
+```
+
+* Levantar el proyecto de Xtend en base a un "Existing Maven Project"
  
 Antes de ejecutarlo, entrá al recurso hibernate.cfg.xml (Ctrl + Shift + R > tipeá hibernate y te aparece) 
 y cambiá la contraseña de root de tu base
