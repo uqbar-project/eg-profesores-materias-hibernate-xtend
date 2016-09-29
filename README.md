@@ -1,10 +1,13 @@
 # Profesores y materias
 
+## Prerrequisitos
+
+Necesitás instalar un motor de base de datos relacional (te recomendamos [MySQL](https://www.mysql.com/) que es OpenSource y gratuito)
+
+
 ## Objetivo
 Testea el mapeo objetos-relacional con Hibernate. El ejemplo muestra cómo modelar la relación muchos a muchos entre profesores y materias.
 
-**IMPORTANTE:** Necesitás instalar un motor de base de datos relacional (te recomendamos MySQL que es OpenSource y gratuito)
- 
 * En MySQL: hay que crear una base de datos facultad. No hay que correr los scripts, las tablas se recrean cada vez que se corran los tests en xtend.
 * e importar el proyecto en Xtend
  
