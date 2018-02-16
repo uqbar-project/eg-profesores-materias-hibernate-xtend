@@ -1,0 +1,15 @@
+language: java
+
+service:
+  - mysql
+
+jdk:
+  - oraclejdk8
+
+before_install:
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('laura') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+
+script:
+  - mvn -e -DTRAVIS_JOB_ID=$TRAVIS_JOB_ID clean install jacoco:report coveralls:report
+
+
