@@ -1,5 +1,7 @@
 # Profesores y materias
 
+![Travis](https://travis-ci.org/uqbar-project/eg-profesores-materias-hibernate-xtend.svg?branch=master)  [![Coverage Status](https://coveralls.io/repos/github/uqbar-project/eg-profesores-materias-hibernate-xtend/badge.svg?branch=master&service=github)](https://coveralls.io/github/uqbar-project/eg-profesores-materias-hibernate-xtend?branch=master&service=github)
+
 ## Prerrequisitos
 
 Necesitás instalar un motor de base de datos relacional (te recomendamos [MySQL](https://www.mysql.com/) que es OpenSource y gratuito)
