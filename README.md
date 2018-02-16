@@ -33,5 +33,5 @@ Si vas a ponerle otro nombre al esquema (base de datos), tenés que modificar la
 
 ## Diagrama entidad-relación
 
-![Solución](docs/DER facultad.png)
+![Solución](docs/DER.png)
 
