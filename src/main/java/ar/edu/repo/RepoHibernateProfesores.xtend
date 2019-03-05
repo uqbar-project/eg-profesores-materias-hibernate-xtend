@@ -8,9 +8,6 @@ import org.hibernate.criterion.Restrictions
 
 class RepoHibernateProfesores extends AbstractRepoHibernate<Profesor> {
 
-	new() {
-	}
-
 	def getProfesores(Materia materia) {
 		var List<Profesor> result = null
 		val session = sessionFactory.openSession
