@@ -9,7 +9,7 @@ import org.hibernate.cfg.Configuration
 
 abstract class AbstractRepoHibernate<T> {
 	
-	private static final SessionFactory sessionFactory = 
+	static final SessionFactory sessionFactory = 
 		new Configuration()
 			.configure()
 			.addAnnotatedClass(Materia)

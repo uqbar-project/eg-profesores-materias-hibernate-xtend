@@ -13,21 +13,16 @@ class Materia {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id
+	Long id
 
 	@Column
-	private String nombre
+	String nombre
 
 	@Column
-	private int anio
+	int anio
 	
-	// Lo necesita Hibernate
-	new() {}
-	
-	new(String nombre, int anio) {
-		this.nombre = nombre
-		this.anio = anio
-	}
+	// Hibernate necesita un constructor sin argumentos
+	// si creás un constructor con parámetros debés agregar uno sin ninguno
 	
 	override toString() {
 		nombre + " (" + anio + ")"

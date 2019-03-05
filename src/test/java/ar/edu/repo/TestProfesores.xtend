@@ -21,22 +21,37 @@ class TestProfesores {
 	
 	@Before
 	def void init() {
-		algoritmos = new Materia("Algoritmos y Estructura de Datos", 1)
-		paradigmas = new Materia("Paradigmas de Programacion", 2)
-		disenio = new Materia("Diseño de Sistemas", 3)
+		algoritmos = new Materia => [
+			nombre = "Algoritmos y Estructura de Datos"
+			anio = 1
+		]
+		paradigmas = new Materia => [
+			nombre = "Paradigmas de Programacion"
+			anio = 2
+		]
+		disenio = new Materia => [
+			nombre = "Diseño de Sistemas"
+			anio = 3
+		]
 		
 		repoMaterias = new RepoHibernateMaterias
 		repoMaterias.add(algoritmos)
 		repoMaterias.add(paradigmas)
 		repoMaterias.add(disenio)
 		
-		spigariol = new Profesor("Lucas Spigariol")
+		spigariol = new Profesor => [
+			nombreCompleto = "Lucas Spigariol"
+		]
 		spigariol.agregarMateria(algoritmos)
 		spigariol.agregarMateria(paradigmas)
-		passerini = new Profesor("Nicolás Passerini")
+		passerini = new Profesor => [
+			nombreCompleto = "Nicolás Passerini"
+		]
 		passerini.agregarMateria(paradigmas)
 		passerini.agregarMateria(disenio)
-		dodino = new Profesor("Fernando Dodino")
+		dodino = new Profesor => [
+			nombreCompleto = "Fernando Dodino"
+		]
 		dodino.agregarMateria(disenio)
 		repoProfes = new RepoHibernateProfesores
 		repoProfes.add(spigariol)

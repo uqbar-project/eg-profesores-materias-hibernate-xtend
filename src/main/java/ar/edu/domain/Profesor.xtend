@@ -18,24 +18,17 @@ class Profesor implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id
+	Long id
 
 	@Column
-	private String nombreCompleto
+	String nombreCompleto
 	
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<Materia> materias
+	Set<Materia> materias = new HashSet<Materia>
 
-	// Lo necesita Hibernate
-	new() {
+	// Hibernate necesita un constructor sin argumentos
+	// si creás un constructor con parámetros debés agregar uno sin ninguno
 		
-	}
-		
-	new(String nombreCompleto) {
-		materias = new HashSet<Materia>
-		this.nombreCompleto = nombreCompleto
-	}
-	
 	def void agregarMateria(Materia materia) {
 		materias.add(materia)
 	}
