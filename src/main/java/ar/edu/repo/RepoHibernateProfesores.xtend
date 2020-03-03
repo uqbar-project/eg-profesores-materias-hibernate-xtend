@@ -2,48 +2,61 @@ package ar.edu.repo
 
 import ar.edu.domain.Materia
 import ar.edu.domain.Profesor
-import java.util.List
+import javax.persistence.EntityManager
+import javax.persistence.criteria.Join
+import javax.persistence.criteria.JoinType
+import javax.persistence.criteria.Root
 import org.hibernate.HibernateException
-import org.hibernate.criterion.Restrictions
 
 class RepoHibernateProfesores extends AbstractRepoHibernate<Profesor> {
 
+	
 	def getProfesores(Materia materia) {
-		var List<Profesor> result = null
-		val session = sessionFactory.openSession
-		try {
-			result = session
-				.createCriteria(typeof(Profesor))
-				.createAlias("materias", "materias")
-				.add(Restrictions.eq("materias.id", materia.id))
-				.list
-		} catch (HibernateException e) {
-			throw new RuntimeException(e)
-		} finally {
-			session.close
-		}
-		result
-	}
+		val entityManager = createEntityManager
+		val query = entityManager.getBasicQuery
 
-	override get(Long id, boolean deep) {
-		var Profesor profesor = null
-		val session = sessionFactory.openSession
+		val criteria = entityManager.criteriaBuilder
+		val Root<Profesor> from = query.from(Profesor)
+		from.alias("materias")
+		val Join<Profesor, Materia> materias = from.join("materias", JoinType.INNER)
+		query
+			.where(criteria.equal(materias.get("id"), materia.id))
+
 		try {
-			profesor = session.get(Profesor, id) as Profesor
+			return entityManager.createQuery(query).resultList
+		} finally {
+			entityManager.close
+		}
+	}
+	
+	override get(Long id, boolean deep) {
+		val entityManager = createEntityManager
+		val criteria = entityManager.criteriaBuilder
+
+		val query = entityManager.getBasicQuery
+		val Root<Profesor> from = query.from(Profesor)
+		try {
+			query
+				.where(criteria.equal(from.get("id"), id))
+			
 			if (deep) {
-				profesor.materias.size
+				from.fetch("materias", JoinType.INNER)
 			}
+			return entityManager.createQuery(query).singleResult
 		} catch (HibernateException e) {
 			throw new RuntimeException(e)
 		} finally {
-			session.close
+			entityManager.close
 		}
-		profesor
 	}
 
 	override delete(Profesor profesor) {
 		profesor.clearMaterias()
 		super.delete(profesor)
 	}
-	
+
+	private def getBasicQuery(EntityManager entityManager) {
+		return entityManager.criteriaBuilder.createQuery(Profesor)
+	}
+		
 }

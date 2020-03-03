@@ -1,7 +1,6 @@
 package ar.edu.repo
 
 import ar.edu.domain.Materia
-import org.hibernate.Session
 
 class RepoHibernateMaterias extends AbstractRepoHibernate<Materia> {
 	
@@ -10,7 +9,7 @@ class RepoHibernateMaterias extends AbstractRepoHibernate<Materia> {
 	}
 	
 	def void deleteAll() {
-		this.executeBatch([ session| (session as Session).createQuery("delete from Materia").executeUpdate])
+		this.executeBatch([ entityManager | entityManager.createQuery("delete from Materia").executeUpdate])
 	}
 	
 }

@@ -3,13 +3,18 @@ package ar.edu.repo
 import ar.edu.domain.Materia
 import ar.edu.domain.Profesor
 import org.hibernate.LazyInitializationException
-import org.junit.After
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
+import static org.junit.jupiter.api.Assertions.assertThrows
+
+@DisplayName("Dado un profesor que da una materia")
 class TestProfesores {
-	
+
 	Profesor spigariol
 	Profesor passerini
 	Profesor dodino
@@ -18,8 +23,8 @@ class TestProfesores {
 	Materia disenio
 	RepoHibernateMaterias repoMaterias
 	RepoHibernateProfesores repoProfes
-	
-	@Before
+
+	@BeforeEach
 	def void init() {
 		algoritmos = new Materia => [
 			nombre = "Algoritmos y Estructura de Datos"
@@ -59,32 +64,34 @@ class TestProfesores {
 		repoProfes.add(dodino)
 	}
 
-	@After
+	@AfterEach
 	def void end() {
 		repoProfes.delete(spigariol)
 		repoProfes.delete(passerini)
 		repoProfes.delete(dodino)
 		repoMaterias.deleteAll
 	}
-		
+
 	@Test
+	@DisplayName("si consultamos al repositorio de profesores por materia, aparece ese profesor")
 	def void testSpigariolDaParadigmas() {
 		val profesQueDanParadigmas = repoProfes.getProfesores(paradigmas)
-		println("profesQueDanParadigmas: " + profesQueDanParadigmas)
-		println("spigariol: " + spigariol)
-		Assert.assertTrue(profesQueDanParadigmas.contains(spigariol))
+		assertEquals(2, profesQueDanParadigmas.size)
+		assertTrue(profesQueDanParadigmas.contains(spigariol))
 	}
 
-	@Test(expected=LazyInitializationException)
+	@Test
+	@DisplayName("no puedo conocer las materias que da un profesor si la colección es lazy y no la traje")
 	def void testNoPuedoSaberQueMateriasDaUnProfesorHaciendoGetPorId() {
 		val spigariolBase = repoProfes.get(spigariol.id)
-		println ("Materias de Spigariol: " + spigariolBase.materias)
+		assertThrows(LazyInitializationException, [ assertEquals(2, spigariolBase.materias.size) ])
 	}
-	
+
 	@Test
+	@DisplayName("puedo conocer las materias que da un profesor si la colección es lazy y pedí explícitamente traerla")
 	def void testSiPuedoSaberQueMateriasDaUnProfesorHaciendoGetPorId() {
 		val spigariolBase = repoProfes.get(spigariol.id, true)
-		println ("Materias de Spigariol: " + spigariolBase.materias)
+		assertEquals(2, spigariolBase.materias.size)
 	}
-	
+
 }

@@ -1,25 +1,18 @@
 package ar.edu.repo
 
-import ar.edu.domain.Materia
-import ar.edu.domain.Profesor
-import org.hibernate.HibernateException
-import org.hibernate.Session
-import org.hibernate.SessionFactory
-import org.hibernate.cfg.Configuration
+import javax.persistence.EntityManager
+import javax.persistence.EntityManagerFactory
+import javax.persistence.Persistence
+import javax.persistence.PersistenceException
 
 abstract class AbstractRepoHibernate<T> {
 	
-	static final SessionFactory sessionFactory = 
-		new Configuration()
-			.configure()
-			.addAnnotatedClass(Materia)
-			.addAnnotatedClass(Profesor)
-			.buildSessionFactory()
+	static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Profesores")
 
-	def getSessionFactory() {
-		sessionFactory
+	def createEntityManager() {
+		entityManagerFactory.createEntityManager
 	}
-	
+
 	def T get(Long id) {
 		get(id, false)
 	}
@@ -38,11 +31,15 @@ abstract class AbstractRepoHibernate<T> {
 	 * (otra opción podría haber sido definir un template method)
 	 */
 	def void add(T object) {
-		this.executeBatch([ session| (session as Session).save(object)])
+		this.executeBatch([ entityManager | entityManager.persist(object) ])
 	}
 		
 	def void delete(T object) {
-		this.executeBatch([ session| (session as Session).delete(object)])
+		this.executeBatch([ entityManager |
+			// Hack para evitar el error "Removing a detached instance ar.edu.domain.Profesor#436" 
+			val objectToRemove = if (entityManager.contains(object)) object else entityManager.merge(object)
+			entityManager.remove(objectToRemove)
+		])
 	}
 	
 	/**
@@ -50,17 +47,19 @@ abstract class AbstractRepoHibernate<T> {
 	 * esa expresion recibe como unico parametro un session y lo aplica a un
 	 * bloque que no devuelve nada (void)
 	 */
-	def void executeBatch((Session)=>void closure) {
-		val session = sessionFactory.openSession
+	def void executeBatch((EntityManager)=>void closure) {
+		val entityManager = this.createEntityManager 
 		try {
-			session.beginTransaction
-			closure.apply(session)
-			session.transaction.commit
-		} catch (HibernateException e) {
-			session.transaction.rollback
+			entityManager => [
+				transaction.begin
+				closure.apply(entityManager)
+				transaction.commit
+			]			
+		} catch (PersistenceException e) {
+			entityManager.transaction.rollback
 			throw new RuntimeException(e)
 		} finally {
-			session.close
+			entityManager.close
 		}
 	}
 	
